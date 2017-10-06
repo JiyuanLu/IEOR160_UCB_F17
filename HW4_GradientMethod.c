@@ -27,16 +27,19 @@ int main(){
 	double x1 = ((double)rand()/RAND_MAX) , x2 = ((double)rand()/RAND_MAX);
 	printf("initial point is (%lf , %lf) \t",x1,x2);
 	printf("f = %lf\n",f(x1,x2));
-	double step = alpha;
-	double oldValue, newValue;
 	for(int i=0; i<iterations;i++){
+		double oldValue, newValue;
+		double step = alpha;
+		double t1, t2;
+		oldValue = f(x1,x2);
 		do{
-			oldValue = f(x1,x2);
-			x1 -= step * g1(x1,x2);
-			x2 -= step * g2(x1,x2);
-			newValue = f(x1,x2);
+			t1 = x1 - step * g1(x1,x2);
+			t2 = x2 - step * g2(x1,x2);
+			newValue = f(t1,t2);
 			step *= beta;
-		}while(oldValue <= newValue);
+		}while(newValue > oldValue);
+		x1 = t1;
+		x2 = t2;
 		printf("at iteration %d: ",i+1);
 		printf("point:(%lf,%lf)\t",x1,x2);
 		printf("f = %lf\n",f(x1,x2));

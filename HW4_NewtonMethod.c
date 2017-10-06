@@ -45,22 +45,25 @@ int main(){
 	double x1 = ((double)rand()/RAND_MAX) , x2 = ((double)rand()/RAND_MAX);
 	printf("initial point is (%lf , %lf) \t",x1,x2);
 	printf("f = %lf\n",f(x1,x2));
-	double step = alpha;
-	double oldValue, newValue;
 	for(int i=0; i<iterations;i++){
+		double oldValue, newValue;
+		double step = alpha;
+		double t1, t2;
+		oldValue = f(x1,x2);
 		do{
 			double hessian[N][N] = {{h11(x1,x2), h12(x1,x2)}, {h21(x1,x2), h22(x1,x2)}};
 			//printf("%lf \t %lf \n %lf %lf \n",hessian[0][0],hessian[0][1],hessian[1][0],hessian[1][1]);
 			GetInverse(hessian,2);
 			//printf("%lf \t %lf \n %lf %lf \n",inverse[0][0],inverse[0][1],inverse[1][0],inverse[1][1]);
-			oldValue = f(x1,x2);
 			double temp1 = inverse[0][0] * g1(x1,x2) + inverse[0][1] * g2(x1,x2);
 			double temp2 = inverse[1][0] * g1(x1,x2) + inverse[1][1] * g2(x1,x2);
-			x1 -= step * temp1;
-			x2 -= step * temp2;
-			newValue = f(x1,x2);
+			t1 = x1 - step * temp1;
+			t2 = x2 - step * temp2;
+			newValue = f(t1,t2);
 			step *= beta;
-		}while(oldValue <= newValue);
+		}while(newValue > oldValue);
+		x1 = t1;
+		x2 = t2;
 		printf("at iteration %d: ",i+1);
 		printf("point:(%lf,%lf)\t",x1,x2);
 		printf("f = %lf\n",f(x1,x2));
